@@ -3,6 +3,8 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { nanoid } from "nanoid";
 import InputMask from "react-input-mask";
+import { useDispatch } from "react-redux";
+import { addContact } from "../redux/contactsSlice";
 
 const initialValues = {
   name: "",
@@ -18,28 +20,25 @@ const validationSchema = yup.object().shape({
   number: yup.string().required("Number is required"),
 });
 
+function ContactForm() {
+  const dispatch = useDispatch();
 
-function logToConsole(values) {
-  console.log(
-    "Contact added:",
-    "\nName:",
-    values.name,
-    "\nNumber:",
-    values.number
-  );
-}
-
-function ContactForm({ onAddContact }) {
   const handleSubmit = (values, { resetForm }) => {
     // Gelen numara değeri number olarak geliyor. Ancak daha iyi gözükmesi için xxx-xx-xx formatına çeviriyoruz.
     const formattedNumber = values.number
       .toString()
       .replace(/(\d{3})(\d{2})(\d{2})/, "$1-$2-$3");
 
-    onAddContact({ id: nanoid(8), ...values, number: formattedNumber });
-    logToConsole(values);
+    dispatch(
+      addContact({
+        id: nanoid(8),
+        ...values,
+        number: formattedNumber,
+      })
+    );
     resetForm();
   };
+
   return (
     <div className={styles.contactForm}>
       <Formik
