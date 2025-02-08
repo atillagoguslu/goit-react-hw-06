@@ -2,6 +2,7 @@ import styles from "./ContactForm.module.css";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { nanoid } from "nanoid";
+import InputMask from "react-input-mask";
 
 const initialValues = {
   name: "",
@@ -14,8 +15,9 @@ const validationSchema = yup.object().shape({
     .min(3, "Name must be at least 3 characters")
     .max(50, "Name must be less than 50 characters")
     .required("Name is required"),
-  number: yup.number().required("Number is required"),
+  number: yup.string().required("Number is required"),
 });
+
 
 function logToConsole(values) {
   console.log(
@@ -29,7 +31,12 @@ function logToConsole(values) {
 
 function ContactForm({ onAddContact }) {
   const handleSubmit = (values, { resetForm }) => {
-    onAddContact({ id: nanoid(8), ...values });
+    // Gelen numara değeri number olarak geliyor. Ancak daha iyi gözükmesi için xxx-xx-xx formatına çeviriyoruz.
+    const formattedNumber = values.number
+      .toString()
+      .replace(/(\d{3})(\d{2})(\d{2})/, "$1-$2-$3");
+
+    onAddContact({ id: nanoid(8), ...values, number: formattedNumber });
     logToConsole(values);
     resetForm();
   };
@@ -51,7 +58,11 @@ function ContactForm({ onAddContact }) {
           />
 
           <label htmlFor="number">Number</label>
-          <Field type="number" name="number" placeholder="Number" />
+          <Field name="number">
+            {({ field }) => (
+              <InputMask {...field} mask="999-99-99" placeholder="xxx-xx-xx" />
+            )}
+          </Field>
           <ErrorMessage
             name="number"
             component="div"
