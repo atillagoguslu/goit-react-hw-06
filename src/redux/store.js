@@ -29,9 +29,10 @@ const contactsSlice = createSlice({
       localStorage.setItem("contacts", JSON.stringify(state)); // LocalStorage'a kaydetmek için kullanılır.
     },
 
-
     deleteContact: (state, action) => {
-      return state.filter((contact) => contact.id !== action.payload);
+      const newState = state.filter((contact) => contact.id !== action.payload);
+      localStorage.setItem("contacts", JSON.stringify(newState)); // LocalStorage'a kaydetmek için kullanılır.
+      return newState;
     },
   },
 });
