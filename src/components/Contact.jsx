@@ -1,6 +1,12 @@
 import styles from "./Contact.module.css";
 
 function Contact({ name, number, onDelete }) {
+  const handleDelete = () => {
+    if (window.confirm(`Are you sure you want to delete ${name}?`)) {
+      onDelete();
+    }
+  };
+
   return (
     <div className={styles.contact}>
       <div className={styles.contactCard}>
@@ -12,7 +18,7 @@ function Contact({ name, number, onDelete }) {
             <span>{number}</span>
           </div>
         </div>
-        <button className={styles.deleteBtn} onClick={onDelete}>
+        <button className={styles.deleteBtn} onClick={handleDelete}>
           Delete
         </button>
       </div>
