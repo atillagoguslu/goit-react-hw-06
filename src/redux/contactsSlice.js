@@ -14,13 +14,26 @@ const contactsSlice = createSlice({
   },
 
   reducers: {
-    addContact: (state, action) => {
-      state.items.push(action.payload);
+    addContact: {
+      reducer(state, action) {
+        try {
+          state.items.push(action.payload);
+        } catch (error) {
+          console.error("Failed to add contact:", error);
+        }
+      },
     },
-    deleteContact: (state, action) => {
-      state.items = state.items.filter(
-        (contact) => contact.id !== action.payload
-      );
+    deleteContact: {
+      reducer(state, action) {
+        try {
+          const index = state.items.findIndex(
+            (contact) => contact.id === action.payload
+          );
+          state.items.splice(index, 1);
+        } catch (error) {
+          console.error("Failed to delete contact:", error);
+        }
+      },
     },
   },
 });
