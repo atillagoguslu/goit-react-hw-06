@@ -6,7 +6,7 @@ import ContactForm from "./components/ContactForm.jsx";
 function App() {
   return (
     <div className="container">
-      <h1 className="phonebook-title">Phonebook</h1>
+      <h1 className="phonebook-title">Phonebook with Redux</h1>
       <ContactForm />
       <SearchBox />
       <ContactList />
